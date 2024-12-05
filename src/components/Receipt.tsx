@@ -52,19 +52,19 @@ export default function Receipt({ receipt, onClose }: ReceiptProps) {
                 <tr key={item.id} className="border-b">
                   <td className="py-2">{item.title}</td>
                   <td className="text-right py-2">{item.quantity}</td>
-                  <td className="text-right py-2">KES {item.price.toLocaleString()}</td>
-                  <td className="text-right py-2">KES {(item.price * item.quantity).toLocaleString()}</td>
+                  <td className="text-right py-2">R {item.price.toLocaleString()}</td>
+                  <td className="text-right py-2">R {(item.price * item.quantity).toLocaleString()}</td>
                 </tr>
               ))}
               <tr className="font-bold">
                 <td colSpan={3} className="text-right py-2">Total:</td>
-                <td className="text-right py-2">KES {receipt.total.toLocaleString()}</td>
+                <td className="text-right py-2">R {receipt.total.toLocaleString()}</td>
               </tr>
             </tbody>
           </table>
 
           <div className="text-center text-sm text-gray-600">
-            <p>Thank you for shopping with 7 Days Menswear!</p>
+            <p>Thank you for shopping with us!</p>
             <p>All items come with our quality guarantee.</p>
           </div>
         </div>
