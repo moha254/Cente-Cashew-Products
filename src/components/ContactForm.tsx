@@ -52,8 +52,8 @@ export default function ContactForm() {
         from_name: formData.name,
         from_email: formData.email,
         message: `New order ${orderId}\n\nItems:\n${cartItems
-          .map(item => `- ${item.title} (Qty: ${item.quantity}) - KES ${(item.price * item.quantity).toLocaleString()}`)
-          .join('\n')}\n\nTotal: KES ${total.toLocaleString()}`,
+          .map(item => `- ${item.title} (Qty: ${item.quantity}) - R ${item.price * item.quantity}`)
+          .join('\n')}\n\nTotal: R ${total}`,
       };
 
       await emailjs.send(
