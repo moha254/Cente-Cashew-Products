@@ -144,7 +144,7 @@ export default function ContactForm() {
       `*Order Items:*\n${itemsList}\n\n` +
       `*Total: R ${total.toLocaleString()}*\n\n` +
       `${formData.message ? `*Special Instructions:*\n${formData.message}\n\n` : ''}` +
-      `Thank you for your order!`
+      `Thank you!`
     );
   };
 

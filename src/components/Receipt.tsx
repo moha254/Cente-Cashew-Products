@@ -27,7 +27,7 @@ export default function Receipt({ receipt, onClose }: ReceiptProps) {
         <div id="receipt" className="bg-white p-6">
           <div className="text-center mb-6">
           
-            <h2 className="text-2xl font-bold">7 Days Menswear</h2>
+            <h2 className="text-2xl font-bold">Premium Cashew Products</h2>
             <p className="text-gray-600">Order Receipt</p>
           </div>
 
