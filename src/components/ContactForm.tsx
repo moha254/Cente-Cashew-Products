@@ -6,11 +6,14 @@ import { useCart } from '../context/CartContext';
 import Receipt from './Receipt';
 import { Receipt as ReceiptType } from '../types';
 
+const API_URL = 'http://localhost:5000/api';
+
 export default function ContactForm() {
   const { cartItems, clearCart } = useCart();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,6 +34,49 @@ export default function ContactForm() {
     try {
       const orderId = generateOrderId();
       const total = calculateTotal();
+
+      // Save contact information
+      const contactResponse = await fetch(`${API_URL}/contacts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+        }),
+      });
+
+      if (!contactResponse.ok) {
+        throw new Error('Failed to save contact information');
+      }
+
+      // Save order information
+      const orderResponse = await fetch(`${API_URL}/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId,
+          customerName: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          items: cartItems.map(item => ({
+            name: item.title,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          totalAmount: total,
+          status: 'pending',
+        }),
+      });
+
+      if (!orderResponse.ok) {
+        throw new Error('Failed to save order');
+      }
 
       const message = generateWhatsAppMessage(orderId, total);
       const whatsappNumber = '27817745975';
@@ -65,7 +111,7 @@ export default function ContactForm() {
 
       toast.success('Order placed successfully!');
       setReceipt(newReceipt);
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
       toast.error('Failed to place order. Please try again.');
       console.error('Error:', error);
@@ -93,7 +139,8 @@ export default function ContactForm() {
       `*New Order: ${orderId}*\n\n` +
       `*Customer Details:*\n` +
       `Name: ${formData.name}\n` +
-      `Email: ${formData.email}\n\n` +
+      `Email: ${formData.email}\n` +
+      `Phone: ${formData.phone}\n\n` +
       `*Order Items:*\n${itemsList}\n\n` +
       `*Total: R ${total.toLocaleString()}*\n\n` +
       `${formData.message ? `*Special Instructions:*\n${formData.message}\n\n` : ''}` +
@@ -156,6 +203,22 @@ export default function ContactForm() {
               id="email"
               name="email"
               value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              disabled={isSubmitting}
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
               onChange={handleChange}
               required
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
