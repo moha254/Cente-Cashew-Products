@@ -86,7 +86,7 @@ export default function ContactForm() {
 
   const generateWhatsAppMessage = (orderId: string, total: number) => {
     const itemsList = cartItems
-      .map(item => `- ${item.title} (Qty: ${item.quantity}) - KES ${(item.price * item.quantity).toLocaleString()}`)
+      .map(item => `- ${item.title} (Qty: ${item.quantity}) - R ${(item.price * item.quantity).toLocaleString()}`)
       .join('\n');
 
     return encodeURIComponent(
@@ -95,7 +95,7 @@ export default function ContactForm() {
       `Name: ${formData.name}\n` +
       `Email: ${formData.email}\n\n` +
       `*Order Items:*\n${itemsList}\n\n` +
-      `*Total: KES ${total.toLocaleString()}*\n\n` +
+      `*Total: R ${total.toLocaleString()}*\n\n` +
       `${formData.message ? `*Special Instructions:*\n${formData.message}\n\n` : ''}` +
       `Thank you for your order!`
     );
@@ -117,14 +117,14 @@ export default function ContactForm() {
               {cartItems.map(item => (
                 <li key={item.id} className="flex justify-between">
                   <span>{item.title} (Qty: {item.quantity})</span>
-                  <span>KES {(item.price * item.quantity).toLocaleString()}</span>
+                  <span>R {(item.price * item.quantity).toLocaleString()}</span>
                 </li>
               ))}
             </ul>
             <div className="mt-4 pt-4 border-t border-green-200">
               <div className="flex justify-between font-bold text-green-800">
                 <span>Total:</span>
-                <span>KES {calculateTotal().toLocaleString()}</span>
+                <span>R {calculateTotal().toLocaleString()}</span>
               </div>
             </div>
           </div>
