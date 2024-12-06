@@ -104,8 +104,8 @@ function App() {
               </div>
               <div>
                 <h4 className="text-xl font-bold mb-4">Contact</h4>
-                <p className="text-gray-400">Email: info@premiumcashews.com</p>
-                <p className="text-gray-400">Phone: (123) 456-7890</p>
+                <p className="text-gray-400">Email: mohamedabukar412gmail.com</p>
+                <p className="text-gray-400">Phone: (+27) </p>
               </div>
               <div>
                 <h4 className="text-xl font-bold mb-4">Follow Us</h4>
