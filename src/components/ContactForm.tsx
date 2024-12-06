@@ -40,7 +40,9 @@ export default function ContactForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        mode: 'cors',
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -50,7 +52,8 @@ export default function ContactForm() {
       });
 
       if (!contactResponse.ok) {
-        throw new Error('Failed to save contact information');
+        const errorData = await contactResponse.json();
+        throw new Error(errorData.error || 'Failed to save contact information');
       }
 
       // Save order information
@@ -58,7 +61,9 @@ export default function ContactForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        mode: 'cors',
         body: JSON.stringify({
           orderId,
           customerName: formData.name,
@@ -75,7 +80,8 @@ export default function ContactForm() {
       });
 
       if (!orderResponse.ok) {
-        throw new Error('Failed to save order');
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || 'Failed to save order');
       }
 
       const message = generateWhatsAppMessage(orderId, total);
