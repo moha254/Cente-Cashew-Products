@@ -10,7 +10,30 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+      'http://localhost:5173',
+      'https://cante-cashew-product.vercel.app',
+      'https://cante-cashew-product-git-main-mohamedabukars-projects.vercel.app'
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true
+  }));
+  app.use(express.json());
+  
+  // MongoDB Connection
+  mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('MongoDB connection error:', err));
+app.use(cors({
+    origin: [
+      'http://localhost:5173',
+      'https://cante-cashew-product.vercel.app',
+      'https://cante-cashew-product-git-main-mohamedabukars-projects.vercel.app'
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true
+  }));
 app.use(express.json());
 
 // MongoDB Connection
