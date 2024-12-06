@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 });
 
 // Contact Routes
-app.post('/api/contacts', async (req, res) => {
+app.post('/contacts', async (req, res) => {
   try {
     const contact = new Contact(req.body);
     await contact.save();
@@ -51,7 +51,7 @@ app.post('/api/contacts', async (req, res) => {
   }
 });
 
-app.get('/api/contacts', async (req, res) => {
+app.get('/contacts', async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.json(contacts);
@@ -61,7 +61,7 @@ app.get('/api/contacts', async (req, res) => {
 });
 
 // Order Routes
-app.post('/api/orders', async (req, res) => {
+app.post('/orders', async (req, res) => {
   try {
     const order = new Order(req.body);
     await order.save();
@@ -71,7 +71,7 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
-app.get('/api/orders', async (req, res) => {
+app.get('/orders', async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
@@ -81,7 +81,7 @@ app.get('/api/orders', async (req, res) => {
 });
 
 // Get single order
-app.get('/api/orders/:id', async (req, res) => {
+app.get('/orders/:id', async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
