@@ -35,13 +35,36 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.error('MongoDB connection error:', err);
 });
 
-// Test route
-app.get('/', (req, res) => {
-    res.json({ message: 'Server is running' });
+// Single endpoint to handle all requests
+app.post('/', async (req, res) => {
+    try {
+        const { type, data } = req.body;
+        
+        if (type === 'contact') {
+            const contact = new Contact(data);
+            await contact.save();
+            res.status(201).json(contact);
+        } 
+        else if (type === 'order') {
+            const order = new Order(data);
+            await order.save();
+            res.status(201).json(order);
+        }
+        else {
+            res.status(400).json({ error: 'Invalid request type' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
 // Contact Routes
-app.post('/contacts', async (req, res) => {
+app.post('', async (req, res) => {
   try {
     const contact = new Contact(req.body);
     await contact.save();
@@ -51,7 +74,7 @@ app.post('/contacts', async (req, res) => {
   }
 });
 
-app.get('/contacts', async (req, res) => {
+app.get('', async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.json(contacts);
@@ -61,7 +84,7 @@ app.get('/contacts', async (req, res) => {
 });
 
 // Order Routes
-app.post('/orders', async (req, res) => {
+app.post('', async (req, res) => {
   try {
     const order = new Order(req.body);
     await order.save();
@@ -71,17 +94,7 @@ app.post('/orders', async (req, res) => {
   }
 });
 
-app.get('/orders', async (req, res) => {
-  try {
-    const orders = await Order.find().sort({ createdAt: -1 });
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Get single order
-app.get('/orders/:id', async (req, res) => {
+app.get('/:id', async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
@@ -93,7 +106,19 @@ app.get('/orders/:id', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+// Get single order
+app.get(':id', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
