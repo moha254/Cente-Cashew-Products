@@ -12,22 +12,29 @@ const app = express();
 // Middleware
 app.use(cors({
     origin: [
+        'http://localhost:5173',
         'https://cante-cashew-product.vercel.app',
-        'https://cante-cashew-product-git-main-mohamedabukars-projects.vercel.app'
+        'https://cante-cashew-product-git-main-mohamedabukars-projects.vercel.app',
+        'https://cente-cashew-products.onrender.com'
     ],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
+app.use(express.json());
 
-  
-  // MongoDB Connection
-  mongoose.connect(process.env.MONGODB_URI, {
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
-    socketTimeoutMS: 45000,        // Close sockets after 45 seconds
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+});
+
+// Test route
+app.get('/', (req, res) => {
+    res.json({ message: 'Server is running' });
 });
 
 // Contact Routes
