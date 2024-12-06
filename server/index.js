@@ -9,18 +9,17 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'https://cante-cashew-product.vercel.app',
-        'https://cante-cashew-product-git-main-mohamedabukars-projects.vercel.app',
-        'https://cente-cashew-products.onrender.com'
-    ],
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
+// CORS Middleware
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 
 app.use(express.json());
 
@@ -30,6 +29,10 @@ mongoose.connect(process.env.MONGODB_URI, {
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
+}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch((err) => {
+    console.error('MongoDB connection error:', err);
 });
 
 // Test route

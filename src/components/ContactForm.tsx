@@ -53,15 +53,30 @@ export default function ContactForm() {
       // Save contact information
       const contactResponse = await fetch(`${API_URL}/contacts`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit',
         body: JSON.stringify(formData),
       });
-      if (!contactResponse.ok) throw new Error('Failed to save contact information.');
+      
+      if (!contactResponse.ok) {
+        const errorText = await contactResponse.text();
+        console.error('Contact Error:', errorText);
+        throw new Error('Failed to save contact information.');
+      }
 
       // Save order information
       const orderResponse = await fetch(`${API_URL}/orders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit',
         body: JSON.stringify({
           orderId,
           customerName: formData.name,
@@ -76,7 +91,12 @@ export default function ContactForm() {
           status: 'pending',
         }),
       });
-      if (!orderResponse.ok) throw new Error('Failed to save order.');
+
+      if (!orderResponse.ok) {
+        const errorText = await orderResponse.text();
+        console.error('Order Error:', errorText);
+        throw new Error('Failed to save order.');
+      }
 
       // Send WhatsApp message
       const message = generateWhatsAppMessage(orderId, total);
